@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+.button-padding {
+    width: 70px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    background-color: #4CAF50;
+    font-size: 12px;
+    border-radius: 2px;
+    border: none;
+}

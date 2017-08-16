@@ -1,0 +1,22 @@
+[{
+	"accounts": "phanip",
+	"cloudProviders": "aws",
+	"createTs": "1499852383699",
+	"email": "phani@opsmx.com",
+	"instancePort": 80,
+	"name": "spinnakerappdemo",
+	"platformHealthOnly": true,
+	"health": "healthy",
+	"status": "started",
+	"providerSettings": {
+		"aws": {
+			"useAmiBlockDeviceMappings": false
+		}
+	},
+	"user": "anonymous"
+}, {
+	"accounts": "phanip",
+	"name": "testspinnaker",
+	"health": "un healthy",
+	"status": "running"
+}]

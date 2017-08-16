@@ -1,0 +1,166 @@
+   <div ng-controller ="monitoringCtrl">
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+       Dashboard
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+   
+    
+     <section class="content">
+      <!-- Small boxes (Stat box) -->
+    <!--   <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          small box
+          <div class="small-box bg-blue">
+            <div class="inner">
+              <h3>Status<sup style="font-size: 15px"></sup></h3>
+
+              <p></p>
+            </div>
+            <div class="icon">
+              
+            </div>
+            <a  data-toggle="collapse" href="" data-target="#demo" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+            <h4><label>Applications</label>
+              <span class="pull-right"><label>100<sup style="font-size:11px">%</sup></label></span></h4>
+
+              <p class="small-box-text ">1 out 1 Applications Healthy   </p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-sticky-note"></i>
+              </div>
+            <a href="#" ui-sref="applications" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h4><label>Services</label><span class="pull-right"><label>100<sup style="font-size:11px">%</sup></label></span></h4>
+
+              <p class="small-box-text ">3 out of 3 Services Healthy
+</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-cogs"></i>
+            </div>
+            <a ui-sref="pipelines({applicationName: ''})" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4><label>Deployments</label><span class="pull-right"><label>50<sup style="font-size: 11px">%</sup></label></span></h4>
+
+              <p class="small-box-text ">3 out of 6 Deployments Succeeded</p>
+            </div>
+            <div class="icon">
+              <i class="ionicons ion-alert-circled"></i>
+            </div>
+            <a class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4><label>Canary</label><span class="pull-right"><label>50<sup style="font-size: 11px">%</sup></label></span></h4>
+
+              <p class="small-box-text">3 out of 6 Canary Run Failed </p>
+            </div>
+            <div class="icon">
+              <i class="glyphicon glyphicon-cloud"></i>
+            </div>
+            <a  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+         <!-- ./col -->
+      </div>
+      <!-- /.row -->
+      <div id="demo" class="collapse"  >
+					<div class="panel-heading well" style="padding-bottom:0px;" >
+						<div class="row" >
+							<div class="col-sm-7">
+								<div class="col-sm-6">
+									<strong>Number of Doctors/connected</strong>
+								</div>
+								<div class="col-sm-1">:</div>
+								<div class="col-sm-6">{{canaryData.canary_output.name}}</div>
+							</div>
+							<div class="col-sm-5">
+								<div class="col-sm-6">
+									<strong>Number of sessions</strong>
+								</div>
+								<div class="col-sm-1">:</div>
+								<div class="col-sm-6">{{canaryData.canary_output.canaryId}}</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-7">
+								<div class="col-sm-6">
+									<strong>Number of scribes/connected</strong>
+								</div>
+								<div class="col-sm-1">:</div>
+								<div ng-if="canaryData.canary_output.type =='ACA'">
+									<div class="col-sm-6">{{canaryData.canary_output.version1name}}</div>
+								</div>
+								<div ng-show="canaryData.canary_output.type == undefined">
+									<div class="col-sm-6">{{canaryData.canary_output.version1name}}</div>
+								</div>
+							</div>
+							<div class="col-sm-5">
+								<div class="col-sm-6">
+									<strong>Number of BPOs</strong>
+								</div>
+								<div class="col-sm-1">:</div>
+								<div ng-if="canaryData.canary_output.type =='ACA'">
+									<div class="col-sm-6">{{canaryData.canary_output.version2name}}</div>
+								</div>
+								<div
+									ng-show="canaryData.canary_output.type == undefined || canaryData.canary_output.type !=='ACA'">
+									<div class="col-sm-6">{{canaryData.canary_output.version2name}}</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-7">
+								<div class="col-sm-6">
+									<strong>Alerts</strong>
+								</div>
+								<div class="col-sm-1">:</div>
+								<div ng-if="canaryData.canary_output.type =='ACA'">
+									<div class="col-sm-5">{{v1s | date : 'dd MMM yyyy h:mm:ss
+										a'}}</div>
+								</div>
+								<div ng-show="canaryData.canary_output.type == undefined">
+									<div class="col-sm-5">{{canaryStartTime}}</div>
+								</div>
+							</div>
+						</div>
+
+						<br>
+					</div>
+				</div>
+      </section>
+      </div>

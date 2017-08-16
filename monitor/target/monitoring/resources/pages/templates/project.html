@@ -1,0 +1,86 @@
+<div>
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>Organization</h1>
+		<ol class="breadcrumb">
+			<li><a ui-sref="home"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+			<li class="active">Organization</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<div ng-include="'templates/project-template.html'"></div>
+
+	<!-- /.content -->
+	<!-- Content Header (Page header) -->
+
+	<!-- Main content -->
+<!-- 	<section ng-show="showDetails" class="content-header">
+		<div class="row">
+			<div class="col-md-4">
+				<h3>
+					{{selectedName}} <small>History</small>
+				</h3>
+			</div>
+			<div class=" col-md-8">
+				<h3>
+					<button type="button" class=" pull-right btn btn-default"
+						id="daterange-btn">
+						<span> <i class="fa fa-calendar"></i> Select Date Range
+						</span> <i class="fa fa-caret-down"></i>
+					</button>`
+				</h3>
+			</div>
+		</div>
+		/.form group
+	</section>
+	<section ng-show="showTimelineDetails" class="content">
+		row
+		<div class="row" ng-repeat="timeline in groupTimeline.events">
+			<div class="col-md-12">
+				The time line
+				<ul class="timeline">
+					timeline time label
+					<li class="time-label" ><span class="bg-blue"> {{
+							timeline.day }} </span></li>
+					/.timeline-label
+					timeline item
+					<li ng-repeat="timelines in timeline.eventList" ><i ng-if="timelines.description == 'Connected to'"
+						class="fa fa-users bg-green"></i>
+						 <i
+						ng-if="timelines.description == 'Logged out'"
+						class="fa fa-user bg-red"></i> <i
+						ng-if="timelines.description == 'Logged in'"
+						class="fa fa-user bg-green"></i>
+						 <i	ng-if="timelines.description == 'Disconnected from'"
+						class="fa fa-user bg-yellow"></i>
+
+						<div class="timeline-item" >
+							<span class="time"><i class="fa fa-clock-o"></i> {{
+								timelines.timestamp | date:"HH:mm"}} &nbsp;&nbsp; <a class="btn btn-primary btn-xs" ng-click="viewEvents(timelines.rawEvent)">View
+										Event</a></span>
+							<h3 class="timeline-header">
+								<a href="#"></a> {{timelines.description}} <a ui-sref="entityUser({userType: timelines.type,uID: timelines.uID})">{{timelines.name}}</a>
+							</h3>
+							</div>
+							</li>
+					END timeline item
+				</ul>
+			</div>
+			/.col
+		</div>
+		/.row
+	</section>
+	<section class="content" ng-show="showEventMessage">
+		<div class="timeline-header">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+				<span class="glyphicon glyphicon-hand-right"></span>&nbsp; <strong>{{eventMessage}}</strong>
+			</div>
+
+		</div>
+	</section> -->
+	<!-- /.content -->
+
+</div>

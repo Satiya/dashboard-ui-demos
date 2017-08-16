@@ -1,0 +1,130 @@
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title"></h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<form class="form-horizontal" role="form">
+							<div class="col-md-10" style="padding-bottom: 5px;">
+								<label for="Autocomplete" class="col-sm-3 control-label">Name
+									:</label>
+								<div class="col-sm-3">
+									<input type="text"  class="form-control" id="input1"  typeahead="item.name for item in items | filter:$viewValue | limitTo:8" 
+										placeholder="Search by Name" ng-autocomplete ng-model="search.name">
+										
+								</div>
+							<!-- 	<label for="input1" class="col-sm-3 control-label">Health
+									:</label>
+								<div class="col-sm-3">
+									<select 
+										class="col-sm-4 form-control btn btn-default dropdown-toggle"
+										ng-model="search.health" >
+									<option ng-disabled="true" value="">Select Health Status</option>
+									<option value="health">healthy</option>
+									<option value="unhealthy">unhealthy</option>
+									<option value="warning">warning</option>
+									</select>
+								</div> -->
+								<!-- <label for="input1" class="col-sm-3 control-label">UID :</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" id="input1"
+										placeholder="Search by ID" ng-model="search.uID">
+								</div> -->
+							</div>
+
+							<div class="col-md-10" style="padding-bottom: 5px;">
+								<!-- <label for="input1" class="col-sm-3 control-label">Status
+									:</label>
+								<div class="col-sm-3">
+									<select ng-options="status for status in statusList"
+										class="col-sm-4 form-control btn btn-default dropdown-toggle"
+										ng-model="search.status">
+										<option value="" ng-disabled="true">Select a status</option>
+									</select>
+								</div> -->
+							</div>
+							<!-- <div class="col-md-10" style="padding-bottom: 5px;">
+							<span ng-show="showAttribute1">
+								<label for="input1" class="col-sm-3 control-label">{{attribute1}}
+									:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" id="input1"
+										placeholder="Search by {{attribute1}}" ng-model="search.attribute1">
+								</div>
+								</span>
+								<span ng-show="showAttribute2">
+								<label for="input1" class="col-sm-3 control-label">{{attribute2}}
+									:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" id="input1"
+										placeholder="Search by {{attribute2}}"
+										ng-model="search.attribute2">
+								</div>
+								</span>
+							</div>
+							<div class="col-md-10" ng-show="showAttribute3" style="padding-bottom: 5px;">
+								<label for="input1" class="col-sm-3 control-label">{{attribute3}}
+									:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" id="input1"
+										placeholder="Search by {{attribute3}}" ng-model="search.attribute3">
+								</div>
+							</div> -->
+
+						</form>
+					</div>
+				<div class="input-append"></div>
+				<br>
+				<table class="table table-bordered table-condensed table-hover">
+					<thead>
+						<tr>
+							<th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i
+									class="fa fa-sort"></i></a></th>
+							<th class="name">Applications&nbsp;<a ng-click="sort_by('applications')"><i
+									class="fa fa-sort"></i></a></th>
+							<!-- <th class="name">Pipelines&nbsp;<a ng-click="sort_by('pipelineConfigs')"><i
+									class="fa fa-sort"></i></a></th>		 -->
+							<th class="field3">Clusters&nbsp;<a
+								ng-click="sort_by('alerts')"><i class="fa fa-sort"></i></a></th>
+							<th class="status">Updated time &nbsp;<a
+								ng-click="sort_by('updateTs')"><i class="fa fa-sort"></i></a></th>
+							<!-- <th class="score">Health&nbsp;<a ng-click="sort_by('health')"><i
+									class="fa fa-sort"></i></a></th> -->
+						 <th></th> 
+
+						</tr>
+					</thead>
+					<tfoot>
+						<td colspan="10">
+						<dir-pagination-controls class="pull-right"
+								max-size="10" direction-links="true" boundary-links="true">
+							</dir-pagination-controls></td>
+					</tfoot>
+					<tbody>
+						<tr
+							dir-paginate="item in projectData|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
+							<td>{{item.name}}</td>
+							<td>{{item.config.applications.length}}</td>
+						<!-- 	<td>{{item.config.pipelineConfigs.length}}</td> -->
+							<td>{{item.clusters}}</td>
+							<td>{{item.updateTs | date:"dd-MM-yyyy"}}</td>
+							<!-- <td>{{item.health}}</td> -->
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+	<!-- /.col -->
+
+	<!-- /.row -->
+</section>
+

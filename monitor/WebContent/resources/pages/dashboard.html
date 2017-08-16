@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>OpsMx</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap/css/less/forms.less">
+<!-- Font Awesome -->
+<!--   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+ -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="dist/css/Monitoring-UI.css">
+<link rel="stylesheet" href="dist/css/style.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="plugins/iCheck/flat/blue.css">
+<link rel="stylesheet" href="plugins/iCheck/all.css">
+<!-- daterange picker -->
+<link rel="stylesheet"
+	href="plugins/daterangepicker/daterangepicker.css">
+<!-- <link
+	href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"
+	rel="stylesheet"> -->
+
+<!-- jvectormap -->
+<link rel="stylesheet" href="https://www.google.com/jsapi">
+<style type="text/css">
+.selected {
+	background-color: #c0c0c0;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini"
+	ng-app="monitoringApp" ng-controller="monitoringCtrl">
+	<div class="wrapper">
+
+		<header class="main-header">
+			<!-- Logo -->
+			<a href="http://www.opsmx.com/" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
+				<span class="logo-mini"> <img src="dist/img/logo.png"
+					class="img-circle" alt="User Image"></span> <!-- logo for regular state and mobile devices -->
+				<span class="logo-lg"><img src="dist/img/opsmx.png"
+					class="img-square" alt="User Image"></span>
+			</a>
+			<!-- Header Navbar: style can be found in header.less -->
+			<nav class="navbar navbar-static-top">
+				<!-- Sidebar toggle button-->
+				<a class="sidebar-toggle" data-toggle="offcanvas" role="button">
+					<span class="sr-only">Toggle navigation</span>
+				</a>
+
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+						<li class="dropdown user user-menu"><a
+							href="augmedix_web/resources/pages/login.html#/"
+							class="dropdown-toggle" data-toggle="dropdown"> <img
+								src="dist/img/user1.png" class="user-image" alt="User Image">
+								<span class="hidden-xs">OpsMx</span>
+						</a>
+							<ul class="dropdown-menu">
+								<!-- User image -->
+								<li class="user-header"><img src="dist/img/user1.png"
+									class="img-circle" alt="User Image">
+
+									<p>
+										OpsMx
+										<!--   <small>Member since Nov. 2016</small> -->
+									</p></li>
+								<!-- Menu Footer-->
+								<li class="user-footer">
+									<!--  <div class="pull-left">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                </div> -->
+									<div class="text-center">
+										<a href="login.html" class="btn btn-default btn-flat">Sign
+											out</a>
+									</div>
+								</li>
+							</ul></li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<!-- sidebar: style can be found in sidebar.less -->
+			<section class="sidebar">
+
+				<!-- sidebar menu: : style can be found in sidebar.less -->
+				<ul class="sidebar-menu">
+					<li style="padding-bottom: 30px;"></li>
+					<li ui-sref-active="active"><a ui-sref="home"> <i
+							class="fa fa-dashboard"></i> <span>Dashboard</span>
+					</a></li>
+					<li ui-sref-active="active"><a ui-sref="organization"> <i
+							class="fa fa-tasks"></i> <span>Organization</span>
+					</a></li>
+					 <li ui-sref-active="active"><a ui-sref="applications"> <i
+							class="fa fa-sticky-note"></i> <span>Applications</span>
+					</a></li>
+					 <li ui-sref-active="active"><a ui-sref="pipelines({applicationName: ''})"> <i
+							class="fa fa-cogs"></i> <span>Pipeline</span>
+					</a></li>
+					<li ui-sref-active="active"><a ui-sref="policy">
+					 <i class="ionicons ion-alert-circled"></i>&nbsp;&nbsp;<span>Policy</span>
+					</a></li>
+				</ul>
+			</section>
+			<!-- /.sidebar -->
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+
+			<div ui-view></div>
+
+			<!-- /.content -->
+		</div>
+
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs"></div>
+			<strong> <a href="http://opsmx.com">OpsMx</a></strong>
+		</footer>
+
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- jQuery 2.2.3 -->
+	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+		<link rel="stylesheet" href="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+	<!-- jQuery UI 1.11.4 -->
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+ -->
+	<!-- ./angular -->
+	<script type="text/javascript"
+		src="js/angular/angular.js"></script>
+		<!-- <script src="http://code.angularjs.org/1.4.8/angular-resource.js"></script>   -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.4/ui-bootstrap-tpls.min.js"></script>
+	<script type="text/javascript"
+		src="js/angular/angular-ui-router.js"></script>
+	<script type="text/javascript" src="js/angular/dirPagination.js"></script>
+	<script type="text/javascript" src="js/angular/clock-dir.js"></script>
+	<!-- 	<script src="services/frontend-services.js"></script> -->
+	<script type="text/javascript" src="js/services/visualization-service.js"></script>
+	<script type="text/javascript" src="js/angular/ngAutoComplete.js"></script>
+	<script type="text/javascript" src="js/monitoringApp.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<!-- Morris.js charts -->
+	<!-- <script
+		src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script> -->
+	<script type="text/javascript"
+		src="js/graphs/fusioncharts.js"></script>
+	<script
+		src="js/graphs/fusioncharts.charts.js"></script>
+	<script
+		src="js/graphs/fusioncharts.theme.fint.js"></script>
+		
+	<!-- daterangepicker -->
+	<script
+		src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.js"></script>
+		<script src="http://vitalets.github.io/combodate/combodate.js"></script>
+	<script src="plugins/daterangepicker/daterangepicker.js"></script>
+	<!-- Bootstrap WYSIHTML5 -->
+	<!-- Slimscroll -->
+	<!-- AdminLTE App -->
+	<script src="dist/js/app.min.js"></script>
+</body>
+</html>

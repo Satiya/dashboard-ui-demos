@@ -1,0 +1,173 @@
+
+<div>
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			Applications<small></small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+			<li class="active">Applications</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<!-- Default box -->
+		  <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+           <!--    <h3 class="box-title">Sessions</h3> -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+							<div>
+								<form role="Checkform">
+									<span> <label class="checkbox-inline"> <input
+											type="checkbox" id="passedCheckboxId"
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkall" name="passedBox"
+											ng-click="includeColour('SUCCEDED')"
+											ng-model="Checkform.passed" value="SUCCEDED">Pass
+									</label> <label class="checkbox-inline"> <input
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkFail" type="checkbox" id="failedCheckboxId"
+											name="failedBox" ng-model="Checkform.failed"
+											ng-click="includeColour('TERMINAL')" value="TERMINAL">Fail
+									</label> <label class="checkbox-inline"> <input
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkall" id="warningCheckboxId" type="checkbox"
+											name="warningBox" ng-model="Checkform.warning"
+											ng-click="includeColour('NOT_STARTED')" value="">Warning
+									</label>
+									</span> <span class="pull-right"> <input type="text" class=""
+										id="input1" placeholder="Search" ng-model="search.application">
+									</span>
+								</form>
+							</div>
+							<br>
+             
+            <div class="table-responsive">
+								<table class="table table-bordered table-hover"
+									class="panel-heading">
+									<thead class="blue">
+										<tr>
+											<th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i
+													class="fa fa-sort"></i></a></th>
+											<!-- <th class="name">Pipelines&nbsp;<a
+												ng-click="sort_by('number')"><i class="fa fa-sort"></i></a></th> -->
+											<th class="name">Cloud provider&nbsp;<a
+												ng-click="sort_by('stage')"><i class="fa fa-sort"></i></a></th>
+											<!-- <th class="description">Application&nbsp;<a
+											ng-click="sort_by('application')"><i class="fa fa-sort"></i></a></th> -->
+											<!-- <th class="name">Version&nbsp;<a
+											ng-click="sort_by('context.buildInfo.fullDisplayName')"><i
+												class="fa fa-sort"></i></a></th> -->
+											<th class="Duration">Updated time&nbsp;<a
+												ng-click="sort_by('context.buildInfo.duration')"><i
+													class="fa fa-sort"></i></a></th>
+											<th class="Duration">Score&nbsp;<a
+												ng-click="sort_by('context.buildInfo.duration')"><i
+													class="fa fa-sort"></i></a></th>
+											<th class="status">Status&nbsp;<a
+												ng-click="sort_by('status')"><i class="fa fa-sort"></i></a></th>
+
+										</tr>
+									</thead>
+									<tfoot>
+										<td colspan="9"><dir-pagination-controls
+												class="pull-right" max-size="10" direction-links="true"
+												boundary-links="true"> </dir-pagination-controls></td>
+									</tfoot>
+
+									<tbody
+										dir-paginate="item in pipelineDetails | filter:search| filter:colourFilter|itemsPerPage:6| orderBy: '-endTime'">
+										<tr ng-click="getServiceMetrics($index,item);"
+											class="accordion-toggle" data-toggle="collapse"
+											data-target="#{{$index}}">
+											<td><button class="btn btn-defaut btn-xs">
+													<span class="glyphicon glyphicon-menu-down"></span>
+												</button>&nbsp;{{item.application}}</td>
+											<!-- <td>{{item.context.buildInfo.number}}</td> -->
+												<td>{{item.pipelineArray[0].context.deploymentDetails[0].cloudProviderType }}</td>
+
+											<!-- <td>{{item.application}}</td>
+										<td>{{item.context.buildInfo.fullDisplayName}}</td> -->
+											<td >{{getAppPipelineDate(item) | date:"dd-MM-yyyy"
+											}}</td>
+											<!-- <td>{{item.context.canary.canaryResult.overallScore}}</td> -->
+											<td>{{getAppPipelineScore(item)}}</td>
+											<td ng-if="getAppPipelineScoreStatus(item) == 'TERMINAL'"><button
+													type="button"
+													class="button-high-padding btn btn-xs btn-danger">FAIL</button></td>
+											<td ng-if="getAppPipelineScoreStatus(item) == 'NOT_STARTED'"><button
+													type="button"
+													class="button-warning-padding-score btn btn-xs btn-warning">WARNING</button></td>
+											<td ng-if="getAppPipelineScoreStatus(item) == 'SUCCEEDED'"><button
+													type="button" class="button-padding btn btn-xs btn-success">PASS</button></td>
+										</tr>
+
+										<tr data-toggle="collapse" class="hiddenRow"
+											ng-click="getStagesData(pipeline);setSelected($index);"
+											id="selectedRowId" ng-if="$parent.$index == selectedRowId"
+											ng-repeat="pipeline in item.pipelineArray | filter: searchstage |  orderBy:'name' | unique: 'name'"
+											ng-class="{selected: $index === idSelectedVote}">
+											<td><a ui-sref="pipelines({application: pipeline.name})">&nbsp;&nbsp;&nbsp;&nbsp;{{pipeline.name}}</a></td>
+											<!-- <td >{{stage.context.buildInfo.number}}</td> -->
+											<td ></td>
+											<!-- <td ng-if="stage.parentStageId && !angular.isUndefined(stage.context.buildInfo)">{{stage.context.buildInfo.duration |
+												millSecondsToTimeString}}  </td> -->
+												 <td >{{getAppPipelineDate(item) | date:"dd-MM-yyyy"
+											}}</td>
+											<td>{{getuniqueLatestPipelineScore(pipeline,item)}}</td>
+											<td ng-if="getuniqueLatestPipelineScoreStatus(pipeline,item) == 'TERMINAL'"><button
+													type="button"
+													class=" button-high-padding btn btn-xs btn-danger">FAIL</button></td>
+											<td ng-if="getuniqueLatestPipelineScoreStatus(pipeline,item) == 'NOT_STARTED'"><button
+													type="button"
+													class="button-warning-padding-score btn btn-xs btn-warning">WARNING</button></td>
+											<td ng-if="getuniqueLatestPipelineScoreStatus(pipeline,item) == 'SUCCEEDED'"><button
+													type="button"
+													class=" button-padding btn btn-xs btn-success">PASS</button></td>
+													
+													
+
+											<!-- <td class="align-text" ng-if="stage.status == 'NOT_STARTED'"
+												style="color: white;">
+												<button type="button" class="button-padding" 
+													class="btn btn-xs btn-success">PASS</button>
+											</td>
+											<td class="align-text" ng-if="stage.status == 'TERMINAL'"
+												style="color: white;">
+												<button type="button" class="button-high-padding"
+													class="button-high-padding btn btn-xs btn-danger">FAIL</button>
+											</td>
+											<td class="align-text" ng-if="stage.status == 'NOT_STARTED'"
+												style="color: white;">
+												<button type="button" class="button-warning-padding-score"
+													class="btn btn-xs btn-warning">WARNING</button>
+											</td> -->
+
+											<!-- 									
+	<td>{{stage.status}}</td>
+ -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+            
+            
+            
+            
+            
+					</div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+		<!-- /.box -->
+	</section>
+</div>

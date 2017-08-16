@@ -1,0 +1,331 @@
+
+<div>
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			Policy<small></small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+			<li class="active">Policy</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<!-- Default box -->
+		<form name="Form" class="form-horizontal" ng-submit="addSlaData(this)">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Policy name</h3>
+					&nbsp;&nbsp;<input type="text" ng-model="policyname"
+						placeholder=" Enter Policy name" required>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						<div class="col-sm-4 col-md-8">
+							<select class="btn btn-default"
+								ng-options="policyApplication.application for policyApplication in pipelineDetails "
+								ng-model="selectedApplication" required>
+								<option ng-disabled="true" value="">Select Application</option>
+							</select>&nbsp;&nbsp;&nbsp;&nbsp; <select class="btn btn-default"
+								ng-options="pipeline.name for pipeline in selectedApplication.pipelineArray | unique: 'name'"
+								ng-model="selectedPipeline" required>
+								<option value="">Select a Pipeline</option>
+
+							</select> &nbsp;&nbsp;&nbsp;&nbsp;
+							 <select class="btn btn-default" 
+								ng-options="stage.name for stage in selectedPipeline.stages | unique: 'name' | filter:getParentIdStages"
+								ng-model="selectedStage" required>
+								<option value="">Select a Stage</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp;
+						</div>
+					</div>
+					<br>
+
+
+					<!-- /.box-body -->
+
+					<!-- /.box -->
+					<div>
+						<label class="box-title">Condition</label>
+					</div>
+					<div class="box-body"
+						ng-repeat="condition in conditions track by $index">
+						<div class="row">
+							<span ng-init="condition.id=$index+1"> </span> <label
+								ng-if="$index==0"></label> &nbsp;&nbsp;&nbsp;&nbsp; <select
+								class="btn btn-default dropdown-toggle"
+								ng-options="p.statusType as p.statusType for p in statusType"
+								ng-model="condition.statusType" required>
+								<option ng-disabled="true" value="">Select Type</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp; <label ng-if="condition.statusType == 'status'">Of</label>&nbsp;&nbsp;&nbsp;&nbsp;
+							{{condition.option}}
+							<select ng-if="condition.statusType == 'status'"
+								class="btn btn-default dropdown-toggle"
+								ng-options="p.language as p.language for p in type"
+								ng-model="condition.status" required>
+								<option ng-disabled="true" value="">Select Test status</option>
+							</select> <label ng-if="condition.statusType == 'score'">is</label>&nbsp;&nbsp;&nbsp;&nbsp;
+
+							<select ng-if="condition.statusType == 'score'"
+								class="btn btn-default dropdown-toggle"
+								ng-options="p.type as p.type for p in compare"
+								ng-model="condition.compareMethod" required>
+								<option ng-disabled="true" value="">Select Compare</option>
+							</select>&nbsp;&nbsp;&nbsp;&nbsp; <input type="text"
+								ng-if="condition.statusType == 'score'" ng-model="condition.value"
+								placeholder="20" required />&nbsp;&nbsp;&nbsp;&nbsp; <select
+								ng-if="conditions.length-1 != $index"
+								class="btn btn-default dropdown-toggle"
+								ng-options="p.type as p.type for p in types"
+								ng-model="condition.conditionType" required>
+								<option ng-disabled="true" value="">Select Condition</option>
+							</select>&nbsp;&nbsp;&nbsp;&nbsp;
+
+							<button type="button" data-toggle="tooltip"
+								title="Remove current condition" class="btn btn-sm btn-danger"
+								ng-show="showRemove" ng-click="remove()">
+								<span class="glyphicon glyphicon-minus"></span>
+							</button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="button" class="btn btn-sm btn-primary"
+								data-toggle="tooltip" ng-show="$last" title="Add Conditionn"
+								ng-click="addCondition()">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<br>
+						</div>
+					</div>
+
+
+					<div>
+						<label class="box-title">Actions</label><br>
+					</div>
+					<div class="box-body"
+						ng-repeat="action in actions track by $index">
+						<div class="row">
+							<span ng-init="actions.id=$index+1"> </span>
+							<label ng-if="$index==0"></label> &nbsp;&nbsp;&nbsp;&nbsp; 
+							<select
+								class="btn btn-default dropdown-toggle"
+								ng-options="p.action as p.action for p in actionTypes"
+								ng-model="action.action" required>
+								<option ng-disabled="true" value="">Select Action</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp; 
+							   <input  type="text" ng-if="action.action == 'Notify user'"
+								ng-model="action.telephone" placeholder="Telephone" required />&nbsp;&nbsp;&nbsp;&nbsp;
+								
+								 <input  type="text" ng-if="action.action == 'Notify user'"
+								ng-model="action.email" placeholder="Email" required />&nbsp;&nbsp;&nbsp;&nbsp;
+								
+								<select class="btn btn-default" ng-if="action.action == 'Trigger pipeline'"
+									ng-options="pipeline.name as pipeline.name for pipeline in selectedApplication.pipelineArray | unique: 'name'"
+									ng-model="action.pipeline" required>
+									<option value="">Select a Pipeline</option>
+								</select>
+								
+								 <select class="btn btn-default" ng-if="action.action == 'Modify parameters'"
+								ng-options="stage.name as stage.name for stage in selectedPipeline.stages | unique: 'name' | filter:getParentIdStages"
+								ng-model="action.stage" required>
+								<option value="">Select a Stage</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp;
+							
+							 <select class="btn btn-default"  ng-if="action.action == 'Modify parameters'"
+								
+								ng-model="action.parameter" required>
+								<option value="">Select a parameter</option>
+								<option value="canaryRunTime">Canary Runtime</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp; 
+							
+							
+							 <select class="btn btn-default"  ng-if="action.action == 'Modify parameters'"
+								ng-model="action.hours" ng-options="hour for hour in hours" required>
+								<option value="">hours</option>
+								</select>
+							
+							<select class="btn btn-default"  ng-if="action.action == 'Modify parameters'"
+								ng-model="action.minutes" ng-options="minute for minute in minutes" required>
+								<option value="">minutes</option>
+							</select> &nbsp;&nbsp;&nbsp;&nbsp; 
+								
+								<!-- <span  ng-if="action.action == 'Modify parameters'">
+								<input  type="text" id="time" data-format="HH:mm" data-template="HH : mm" ng-model="action.hoursAndMinutes"/>
+								</span> -->
+								
+								
+								<!-- <div class="container">
+    <input id="input-a" value="" data-default="20:48">
+    <button type="button" id="button-a">Check the  minutes</button>
+    <button type="button" id="button-b">Check the  hours</button>
+</div>
+								 -->
+
+								 
+								<!-- <input type="text" ng-model="action.time" ng-if="action.action == 'Modify parameters'"
+									placeholder="hh:mm" required />  -->
+									
+								<!-- 	<span ng-if="action.action == 'Modify parameters'"  uib-timepicker ng-model="action.timePicker"></span> -->
+								<form  >
+									<textarea ng-if="action.action == 'Script'" class="textarea"  ng-model="action.script" placeholder="script here"
+										style="width: 50%; height: 60px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+								</form>
+							
+							
+							<button type="button" data-toggle="tooltip"
+								title="Remove current condition" class="btn btn-sm btn-danger"
+								ng-if="$index != 0" ng-click="removeAction()">
+								<span class="glyphicon glyphicon-minus"></span>
+							</button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="button" class="btn btn-sm btn-primary"
+								data-toggle="tooltip" ng-show="$last" title="Add Conditionn"
+								ng-click="addAction()">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+						
+							<!-- <button data-toggle="tooltip"
+							title="Remove all questions" type="button"
+							ng-show="$index==0" class="btn btn-warning" ng-click="removeAll()">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button><br><br> -->
+							<br>
+						</div>
+					</div>
+
+
+<!-- 
+
+						<form>
+							<label class="checkbox-inline"> <input type="checkbox"
+								ng-model="notifyUser">Notify user
+							</label> <label class="checkbox-inline"> <input type="checkbox"
+								ng-model="triggerPipeline">Trigger pipeline
+							</label> <label class="checkbox-inline"> <input type="checkbox"
+								ng-model="modifyParam">Modify parameters
+							</label> <label class="checkbox-inline"> <input type="checkbox"
+								ng-model="script">Script
+							</label>
+						</form>
+					</div>
+					<br>
+					<div class="box-body" ng-show="notifyUser">
+						<div class="row">
+							<div class="col-sm-4 col-md-10">
+								<input type="text" ng-model="mobileNumber"
+									placeholder="Telephone" required /> &nbsp;&nbsp;&nbsp;&nbsp; <input
+									type="email" ng-model="Email" placeholder="E-mail" required />
+							</div>
+						</div>
+					</div>
+
+					<div class="box-body" ng-show="triggerPipeline">
+						<div class="row">
+							<div class="col-sm-5 col-md-10">
+								<select class="btn btn-default"
+									ng-options="pipeline.name for pipeline in selectedApplication.pipelineArray | unique: 'name'"
+									ng-model="selectedPipeline" required>
+									<option value="">Select a Pipeline</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="box-body" ng-show="modifyParam">
+						<div class="row">
+							<div class="col-sm-5 col-md-10">
+								<input type="text" ng-model="stagename"
+									placeholder="{{selectedStages.name}}" required />&nbsp;&nbsp;&nbsp;&nbsp;
+							</div>
+						</div>
+					</div>
+					<div class="box-body" ng-show="script">
+						<div class="row">
+							<label> <input ng-model="getScript" type="radio"
+								name="optionsRadios" id="optionsRadios3" value="script">
+								Script
+
+							</label>
+							<div class="box-body pad" ng-show="getScript == 'script'">
+								<form>
+									<textarea class="textarea" placeholder="script here"
+										style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+								</form>
+							</div>
+						</div>
+						<br>
+					</div> -->
+					<div class="box-header box-body">
+						<button type="submit" class="btn btn-primary"
+							data-toggle="tooltip">Save</button>
+					</div>
+					
+						<div ng-show="showPolicy" class="box-header box-body">
+							<div class="alert alert-info fade in">
+								<a href="#" class="close" data-dismiss="alert">&times;</a>
+								{{successMessage}}
+							</div>
+					</div>
+					
+				</div>
+			</div>
+			<!-- /.box-body -->
+		</form>
+	</section>
+	
+	<section class="content">
+  <div class="box">
+       <div align="center">
+       <div class="panel-heading"><h3>Configured Policies</h3></div>
+        <div  class="box-body">
+        <div class="table-responsive">
+         <table class="table table-bordered" >
+          <thead>
+           <tr>
+            <th>Policy </th>
+            <th >Application </th>
+          <th >Pipeline</th>
+            <th>Stage</th>
+           <th>Action</th>
+           </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="policy in policyTableDetails">
+            <td>{{policy.policy}}</td>
+            <td> {{policy.application}}</td>
+            <td>{{policy.pipeline}}</td>
+            <td>{{policy.stage}}</td>
+            <td><span ng-repeat="action in policy.actions">{{action.action}}<font ng-if="$index != policy.actions.length-1">,</font></span></td>
+             <td><a ng-click="editPolicyData(policy)" data-toggle="tooltip" title="Edit Policy here" href=""> 
+          <span class="glyphicon glyphicon-edit"></span> Edit</span>
+        </a></td>
+            <td class='deleterow'><a ng-click="deletePolicyData(policy.policyID,$index)" value="remove" data-toggle="tooltip" title="Delete" href=""><div class='glyphicon glyphicon-remove delete'></div></a></td>
+           </tr>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+
+         <!-- <div ng-show="showJsonMessage"  class="panel panel-danger">
+          <div class="panel-heading">
+           <h3 align="center" class="panel-title">{{cookbookMsg}}</h3>
+          </div>
+         </div> -->
+
+        </div>
+       </div>
+ </section>
+
+	<!-- /.content -->
+	<!-- Content Header (Page header) -->
+</div>
+
+<script>
+$(function(){
+    $('#time').combodate({
+        firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
+        minuteStep: 1
+    });  
+});
+</script>

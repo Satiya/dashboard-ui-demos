@@ -1,0 +1,429 @@
+<style>
+</style>
+<div class="row">
+	<!-- Content Header (Page header) -->
+	<div class="col-md-12">
+		<section class="content-header">
+			<h1>
+				Pipelines<small></small>
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+				<li class="active">Pipeline</li>
+			</ol>
+		</section>
+	</div>
+	<br> <br>
+	<div class="col-md-7">
+		<section class="content">
+			<!-- Default box -->
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="box">
+						<div class="box-header">
+							<select class="btn btn-default"
+								ng-options="p.name as p.name for p in pipelineDetails | orderBy: '-name' | unique: 'name'"
+								ng-model="search.name" required>
+								<option value="">Select a Pipeline</option>
+
+							</select> 
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<!-- <form class="form-horizontal" role="form">
+								<div class="col-md-12" style="padding-bottom: 5px;">
+									<label for="input1" class="col-sm-2 control-label">Name
+										:</label>
+									<div class="col-sm-3">
+										<input type="text" class="form-control" id="input1"
+											placeholder="Search by Pipeline Name" ng-model="search.name">
+									</div>
+									<label for="input1" class="col-sm-2 control-label">Name
+										:</label>
+									<div class="col-sm-3">
+										<input type="text" class="form-control" id="input1"
+											placeholder="Search by Application Name"
+											ng-model="search.application">
+									</div>
+										 <label for="input1" class="col-sm-3 control-label">Stage
+									:</label>
+									
+								 <div class="col-sm-3">
+									<select  ng-options="stage for stage in stageFilterValues"
+										class="col-sm-4 form-control btn btn-default dropdown-toggle"
+										ng-model="searchStage.name" >
+									<option ng-disabled="true" value="">Select a stage</option>
+									</select>
+								</div> 
+								</div>
+								<br> <br>
+							</form> -->
+							
+							</div>
+							<br>
+							<div>
+								<form role="Checkform">
+									<span> <label class="checkbox-inline"> <input
+											type="checkbox" id="passedCheckboxId"
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkall" name="passedBox"
+											ng-click="includeColour('SUCCEEDED')"
+											ng-model="Checkform.passed" value="">Pass
+									</label> <label class="checkbox-inline"> <input
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkFail" type="checkbox" id="failedCheckboxId"
+											name="failedBox" ng-model="Checkform.failed"
+											ng-click="includeColour('TERMINAL')" value="fail">Fail
+									</label> <label class="checkbox-inline"> <input
+											ng-true-value="'Employee'" ng-false-value="'User'"
+											ng-checked="checkall" id="warningCheckboxId" type="checkbox"
+											name="warningBox" ng-model="Checkform.warning"
+											ng-click="includeColour('NOT_STARTED')" value="">Warning
+									</label>
+									</span> <span class="pull-right"> <input type="text" class=""
+										id="input1" placeholder="Search" ng-model="search.name">
+									</span>
+								</form>
+							</div>
+							<br>
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover"
+									class="panel-heading">
+									<thead class="blue">
+										<tr>
+											<th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i
+													class="fa fa-sort"></i></a></th>
+											<th class="name">Number&nbsp;<a
+												ng-click="sort_by('number')"><i class="fa fa-sort"></i></a></th>
+											<!-- <th class="name">Stages&nbsp;<a
+												ng-click="sort_by('stage')"><i class="fa fa-sort"></i></a></th> -->
+											<!-- <th class="description">Application&nbsp;<a
+											ng-click="sort_by('application')"><i class="fa fa-sort"></i></a></th> -->
+											<!-- <th class="name">Version&nbsp;<a
+											ng-click="sort_by('context.buildInfo.fullDisplayName')"><i
+												class="fa fa-sort"></i></a></th> -->
+											<th class="Duration">Duration&nbsp;<a
+												ng-click="sort_by('context.buildInfo.duration')"><i
+													class="fa fa-sort"></i></a></th>
+											<th class="Duration">Score&nbsp;<a
+												ng-click="sort_by('context.buildInfo.duration')"><i
+													class="fa fa-sort"></i></a></th>
+											<th class="status">Status&nbsp;<a
+												ng-click="sort_by('status')"><i class="fa fa-sort"></i></a></th>
+
+										</tr>
+									</thead>
+									<tfoot>
+										<td colspan="9"><dir-pagination-controls
+												class="pull-right" max-size="10" direction-links="true"
+												boundary-links="true"> </dir-pagination-controls></td>
+									</tfoot>
+
+									<tbody
+										dir-paginate="item in pipelineDetails|orderBy: '-context.buildInfo.number'|filter:search| filter:colourFilter |itemsPerPage:6">
+										<tr ng-click="getServiceMetrics($index,item);"
+											class="accordion-toggle" data-toggle="collapse"
+											data-target="#{{$index}}">
+											<td><button class="btn btn-defaut btn-xs">
+													<span class="glyphicon glyphicon-menu-down"></span>
+												</button>&nbsp;{{item.name}}</td>
+											<td>{{item.context.buildInfo.number}}</td>
+										<!-- 	<td class="align-text"><span 
+												ng-repeat="stagesList in item.stages" ng-if="staagesList.stage.parentStageId"
+												ng-init="count = $index"  ng-show="$last">
+													{{$index+1}} </span>
+													<p ></p>
+													
+													</td> -->
+
+											<!-- <td>{{item.application}}</td>
+										<td>{{item.context.buildInfo.fullDisplayName}}</td> -->
+											<td>{{item.context.buildInfo.duration |
+												millSecondsToTimeString}}</td>
+											<td ng-if="item.context.canary.canaryResult.overallScore == undefined ">NA</td>
+											<td ng-if="item.context.canary.canaryResult.overallScore != undefined ">{{item.context.canary.canaryResult.overallScore | numberEx:2}}</td>
+											<td ng-if="item.status == 'TERMINAL'"><button
+													type="button"
+													class="button-high-padding btn btn-xs btn-danger">FAIL</button></td>
+											<td ng-if="item.status == 'NOT_STARTED'"><button
+													type="button"
+													class="button-warning-padding-score btn btn-xs btn-warning">WARNING</button></td>
+											<td ng-if="item.status == 'SUCCEEDED'"><button
+													type="button" class="button-padding btn btn-xs btn-success">PASS</button></td>
+										</tr>
+
+										<tr data-toggle="collapse" class="hiddenRow"
+											ng-click="getStagesData(stage);setSelected($index);"
+											id="selectedRowId" ng-if="$parent.$index == selectedRowId"
+											ng-repeat="stage in item.stages"
+											ng-class="{selected: $index === idSelectedVote}">
+											<td ng-if="stage.name == 'Canary' || !stage.parentStageId">{{stage.name}}</td>
+											<td  ng-if="stage.name == 'Canary' || !stage.parentStageId">{{stage.context.buildInfo.number}}</td>
+											<!-- <td></td>
+										<td>{{stage.application}}</td> -->
+											<!-- <td>{{stage.context.buildInfo.fullDisplayName}}</td> -->
+											<!-- <td  ng-if="stage.name == 'ACA Task' || stage.parentStageId"></td> -->
+											<!-- <td ng-if="stage.parentStageId && !angular.isUndefined(stage.context.buildInfo)">{{stage.context.buildInfo.duration |
+												millSecondsToTimeString}}  </td> -->
+												 <td  ng-if="stage.name == 'Canary' || !stage.parentStageId">{{getDutarionByStartAndEndTime(stage.startTime,stage.endTime)}}</td>
+											<td
+												ng-if="stage.context.canary.canaryResult.overallScore != undefined && !stage.parentStageId || stage.name == 'Canary'">{{stage.context.canary.canaryResult.overallScore | numberEx:2}}</td>
+											<td
+												ng-if="stage.context.canary.canaryResult.overallScore == undefined && !stage.parentStageId">NA</td>
+											<td ng-if="stage.status == 'TERMINAL' && !stage.parentStageId || stage.context.canary.canaryResult.overallScore == 70.48"><button
+													type="button"
+													class=" button-high-padding btn btn-xs btn-danger">FAIL</button></td>
+													
+											<td ng-if="stage.status == 'NOT_STARTED' && !stage.parentStageId"><button
+													type="button"
+													class="button-notstarted-padding-score btn btn-xs btn-default">NA</button></td>
+											<td ng-if="stage.status == 'SUCCEEDED' && !stage.parentStageId || stage.context.canary.canaryResult.overallScore == 90.71 && stage.context.canary.canaryResult.overallScore != 70.48"><button
+													type="button"
+													class=" button-padding btn btn-xs btn-success">PASS</button></td>
+
+											<!-- <td class="align-text" ng-if="stage.status == 'NOT_STARTED'"
+												style="color: white;">
+												<button type="button" class="button-padding" 
+													class="btn btn-xs btn-success">PASS</button>
+											</td>
+											<td class="align-text" ng-if="stage.status == 'TERMINAL'"
+												style="color: white;">
+												<button type="button" class="button-high-padding"
+													class="button-high-padding btn btn-xs btn-danger">FAIL</button>
+											</td>
+											<td class="align-text" ng-if="stage.status == 'NOT_STARTED'"
+												style="color: white;">
+												<button type="button" class="button-warning-padding-score"
+													class="btn btn-xs btn-warning">WARNING</button>
+											</td> -->
+
+											<!-- 									
+	<td>{{stage.status}}</td>
+ -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+				<!-- /.col -->
+
+				<!-- /.row -->
+				<!-- /.box -->
+		</section>
+	</div>
+
+	<div class="col-md-5">
+		<!-- Main content -->
+		<section ng-show="showDetails" class="content-header">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>{{stageName}} Details</h3>
+				</div>
+				<div class=" col-md-12"></div>
+			</div>
+			<!-- /.form group -->
+		</section>
+		<section ng-show="showDetails" class="content">
+			<!-- Default box -->
+			<div class="row" >
+				<div class="col-md-12"
+					ng-if="stageName == 'Canary' || stageName == 'ACA Task' ||  stageName == 'ACA Stage' && stageScore != 0">
+					<div class="box box-solid">
+						<div class="box-header with-border">
+
+							<h3 class="box-title pull-left">Canary Status</h3>
+				<!-- 			<h3 class="box-title" style="padding-left: 170px;">Status</h3> -->
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<dl>
+								<table class="table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Risk</th>
+											<th>Confidence</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Overall</td>
+											<td>{{stageScore | numberEx:2}}</td>
+											<td>{{stageScore | numberEx:2}}</td>
+										</tr>
+										<tr>
+											<td>Security</td>
+											<td>90</td>
+											<td>80</td>
+										</tr>
+										<tr>
+											<th>Policy</th>
+											<td>No Policy Configured</td>
+										</tr>
+										<tr>
+											<th>Recommendation</th>
+											<td ng-if="stageStatus == 'TERMINAL'"><a>Not ok to Deploy</a></td>
+											<td ng-if="stageStatus == 'SUCCEEDED'"><a>Ok to Deploy</a></td>
+										</tr>
+									</tbody>
+								</table>
+								
+								<a class="button pull-right btn btn-primary"
+									href="http://analyzer.opsmx.com/opsmx-analysis/public/canaryAnalysis.html?canaryId={{canaryId}}" target="_blank">Report</a>
+							</dl>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+				<div class="col-md-12"
+					ng-if="stageName != 'Canary' && stageName != 'ACA Task' && stageName != 'ACA Stage' || stageScore == 0">
+					<div class="box box-solid">
+						<div class="box-header with-border"></div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<dl>
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Description :</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</dl>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+
+			</div>
+			<div class="row">
+
+				<div class="col-md-12">
+					<div class="box box-solid"
+						ng-if="stageName == 'Canary' || stageName == 'ACA Task' || stageName == 'ACA Stage' && stageScore != 0">
+						<div class="box-header with-border">
+
+							<h3 class="box-title text-center">Decision</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<!-- <h3 class="text-primary text-center">Automated/Manual</h3> -->
+							<div class="text-center">
+								<label> <input type="checkbox" name="optionsRadios"
+									id="Automated" value="script" checked> Automated
+
+								</label>&nbsp;&nbsp;&nbsp;&nbsp; <label> <input type="checkbox"
+									name="optionsRadiosa" id="Manual" value="scripts" ng-disabled>
+									Manual
+
+								</label>
+							</div>
+							<div>
+								<br>
+								<div class="text-center">
+									<button type="button" class="pull-center btn btn-default">Approve</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" class="pull-center btn btn-default">Reject</button>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<button type="button" class="pull-center btn btn-primary"
+						data-toggle="modal" >Dynamic
+						Next Stage & Parameters</button>
+
+					<!-- Small modal -->
+
+					<div class="modal fade bs-example-modal-sm" tabindex="-1"
+						role="dialog" aria-labelledby="mySmallModalLabel">
+						<div class="modal-dialog modal-sm" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title"></h4>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="modal-body">
+
+											<form class="form-horizontal" role="form"
+												ng-submit="submitForm()">
+												<div class="form-group">
+													<label class="col-sm-4 control-label" for="inputEmail3">Duration</label>
+													<div class="col-sm-7">
+														<input type="email" class="form-control" id="inputEmail3"
+															placeholder="20" required />
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-4 control-label" for="inputPassword3">Risk
+														level</label>
+													<div class="col-sm-7">
+														<input type="text" class="form-control"
+															id="inputPassword3" placeholder="20" required />
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="text-center">
+														<button type="submit" class="btn btn-primary">Continue</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<button type="button" class="pull-center btn btn-primary"
+						data-toggle="modal" >Improve
+						Current Stage</button>
+
+					<div class="modal fade bs-example-modal-sm-1" tabindex="-1"
+						role="dialog" aria-labelledby="mySmallModalLabel">
+						<div class="modal-dialog modal-sm" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title"></h4>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="modal-body">
+											<p>No dynamic parameters found</p>
+											<br> <br>
+											<div class="text-center">
+												<button type="submit" data-dismiss="modal"
+													class="btn btn-primary">OK</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.box -->
+			</div>
+	</div>
+
+	<!-- /.col -->
+
+	</section>
+</div>
+</div>
+<!-- /.row -->
+<!-- /.box -->
+</div>

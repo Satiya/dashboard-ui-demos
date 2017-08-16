@@ -1,0 +1,513 @@
+[{
+	"application": "spinnakerappdemo",
+	"id": "ed227550-686a-11e7-b9ab-d19fe9982d66",
+	"index": 2,
+	"keepWaitingPipelines": false,
+	"limitConcurrent": true,
+	"name": "Canary",
+	"parallel": true,
+	"parameterConfig": [],
+	"stages": [{
+		"continuePipeline": false,
+		"failPipeline": true,
+		"job": "RestAppBuild",
+		"master": "Edge10",
+		"name": "Jenkins",
+		"parameters": {},
+		"refId": "1",
+		"requisiteStageRefIds": [],
+		"type": "jenkins"
+	}, {
+		"baseAmi": "ami-d4f47fb4",
+		"baseLabel": "release",
+		"baseName": "opsimage-ubuntu14.04-apache",
+		"baseOs": "trusty",
+		"cloudProviderType": "aws",
+		"extendedAttributes": {},
+		"name": "Bake",
+		"package": "restapp",
+		"refId": "2",
+		"region": "us-west-2",
+		"regions": ["us-west-2"],
+		"requisiteStageRefIds": ["1"],
+		"storeType": "ebs",
+		"type": "bake",
+		"user": "anonymous",
+		"vmType": "hvm"
+	}, {
+		"clusters": [{
+			"account": "phanip",
+			"application": "spinnakerappdemo",
+			"associatePublicIpAddress": true,
+			"availabilityZones": {
+				"us-west-2": ["us-west-2c"]
+			},
+			"base64UserData": "Cg==",
+			"capacity": {
+				"desired": 1,
+				"max": 1,
+				"min": 1
+			},
+			"cloudProvider": "aws",
+			"cooldown": 10,
+			"copySourceCustomBlockDeviceMappings": true,
+			"ebsOptimized": false,
+			"enabledMetrics": [],
+			"freeFormDetails": "gp",
+			"healthCheckGracePeriod": 600,
+			"healthCheckType": "EC2",
+			"iamRole": "BaseIAMRole",
+			"instanceMonitoring": false,
+			"instanceType": "t2.micro",
+			"keyPair": "spinnaker_kp",
+			"loadBalancers": ["spinnakerappdemo-spin-load"],
+			"provider": "aws",
+			"securityGroups": ["sg-cf568fb5"],
+			"stack": "spincluster",
+			"strategy": "highlander",
+			"subnetType": "internal (defaultvpc)",
+			"suspendedProcesses": [],
+			"tags": {},
+			"targetGroups": [],
+			"targetHealthyDeployPercentage": 100,
+			"terminationPolicies": ["Default"],
+			"useAmiBlockDeviceMappings": false,
+			"useSourceCapacity": false,
+			"virtualizationType": null
+		}],
+		"name": "Deploy",
+		"refId": "5",
+		"requisiteStageRefIds": ["6"],
+		"type": "deploy"
+	}, {
+		"baseline": {
+			"account": "phanip",
+			"cluster": "spinnakerappdemo-spincluster-gp"
+		},
+		"canary": {
+			"canaryConfig": {
+				"actionsForUnhealthyCanary": [{
+					"action": "DISABLE"
+				}, {
+					"action": "TERMINATE",
+					"delayBeforeActionInMins": 30
+				}],
+				"canaryAnalysisConfig": {
+					"beginCanaryAnalysisAfterMins": "5",
+					"canaryAnalysisIntervalMins": 30,
+					"combinedCanaryResultStrategy": "AGGREGATE",
+					"lookbackMins": 30,
+					"name": "111",
+					"notificationHours": [1, 2, 3],
+					"useGlobalDataset": false,
+					"useLookback": true
+				},
+				"canaryHealthCheckHandler": {
+					"minimumCanaryResultScore": "60"
+				},
+				"canarySuccessCriteria": {
+					"canaryResultScore": "90"
+				},
+				"lifetimeHours": "0.5",
+				"name": "opsmx"
+			},
+			"owner": null,
+			"watchers": []
+		},
+		"clusterPairs": [{
+			"baseline": {
+				"account": "phanip",
+				"application": "spinnakerappdemo",
+				"associatePublicIpAddress": true,
+				"availabilityZones": {
+					"us-west-2": ["us-west-2c"]
+				},
+				"base64UserData": null,
+				"capacity": {
+					"desired": 1,
+					"max": 1,
+					"min": 1
+				},
+				"cloudProvider": "aws",
+				"cooldown": 10,
+				"ebsOptimized": false,
+				"freeFormDetails": "gp-baseline",
+				"healthCheckGracePeriod": 600,
+				"healthCheckType": "EC2",
+				"iamRole": "BaseIAMRole",
+				"instanceMonitoring": false,
+				"instanceType": "t2.micro",
+				"keyPair": "spinnaker_kp",
+				"loadBalancers": ["spinnakerappdemo-spin-load"],
+				"securityGroups": ["sg-cf568fb5"],
+				"stack": "spincluster",
+				"strategy": "redblack",
+				"subnetType": "internal (defaultvpc)",
+				"suspendedProcesses": [],
+				"tags": {},
+				"targetHealthyDeployPercentage": 100,
+				"terminationPolicies": ["Default"],
+				"useAmiBlockDeviceMappings": false,
+				"useSourceCapacity": false,
+				"virtualizationType": null
+			},
+			"canary": {
+				"account": "phanip",
+				"application": "spinnakerappdemo",
+				"associatePublicIpAddress": true,
+				"availabilityZones": {
+					"us-west-2": ["us-west-2c"]
+				},
+				"base64UserData": null,
+				"capacity": {
+					"desired": 1,
+					"max": 1,
+					"min": 1
+				},
+				"cloudProvider": "aws",
+				"cooldown": 10,
+				"ebsOptimized": false,
+				"freeFormDetails": "gp-canary",
+				"healthCheckGracePeriod": 600,
+				"healthCheckType": "EC2",
+				"iamRole": "BaseIAMRole",
+				"instanceMonitoring": false,
+				"instanceType": "t2.micro",
+				"keyPair": "spinnaker_kp",
+				"loadBalancers": ["spinnakerappdemo-spin-load"],
+				"securityGroups": ["sg-cf568fb5"],
+				"stack": "spincluster",
+				"strategy": "redblack",
+				"subnetType": "internal (defaultvpc)",
+				"suspendedProcesses": [],
+				"tags": {},
+				"targetHealthyDeployPercentage": 100,
+				"terminationPolicies": ["Default"],
+				"useAmiBlockDeviceMappings": false,
+				"useSourceCapacity": false,
+				"virtualizationType": null
+			}
+		}],
+		"name": "Canary",
+		"refId": "6",
+		"requisiteStageRefIds": ["2"],
+		"scaleUp": {
+			"enabled": false
+		},
+		"type": "canary"
+	}],
+	"triggers": [{
+		"enabled": false,
+		"job": "RestAppPoll",
+		"master": "Edge10",
+		"type": "jenkins"
+	}]
+}, {
+	"application": "spinnakerappdemo",
+	"executionEngine": "v2",
+	"id": "b0c2e7a0-685d-11e7-b9ab-d19fe9982d66",
+	"index": 1,
+	"keepWaitingPipelines": false,
+	"limitConcurrent": true,
+	"name": "StaggingAca",
+	"parallel": true,
+	"stages": [{
+		"continuePipeline": false,
+		"failPipeline": true,
+		"job": "RestAppBuild",
+		"master": "Edge10",
+		"name": "Jenkins",
+		"parameters": {},
+		"refId": "1",
+		"requisiteStageRefIds": [],
+		"type": "jenkins"
+	}, {
+		"baseAmi": "ami-d4f47fb4",
+		"baseLabel": "release",
+		"baseName": "opsimage-ubuntu14.04-apache",
+		"baseOs": "trusty",
+		"cloudProviderType": "aws",
+		"extendedAttributes": {},
+		"name": "Bake",
+		"package": "restapp",
+		"rebake": true,
+		"refId": "2",
+		"region": "us-west-2",
+		"regions": ["us-west-2"],
+		"requisiteStageRefIds": ["1"],
+		"storeType": "ebs",
+		"type": "bake",
+		"user": "[anonymous]",
+		"vmType": "hvm"
+	}, {
+		"clusters": [{
+			"account": "phanip",
+			"application": "spinnakerappdemo",
+			"associatePublicIpAddress": true,
+			"availabilityZones": {
+				"us-west-2": ["us-west-2c"]
+			},
+			"base64UserData": null,
+			"capacity": {
+				"desired": 1,
+				"max": 1,
+				"min": 1
+			},
+			"cloudProvider": "aws",
+			"cooldown": 10,
+			"ebsOptimized": false,
+			"freeFormDetails": "gp",
+			"healthCheckGracePeriod": 600,
+			"healthCheckType": "EC2",
+			"iamRole": "BaseIAMRole",
+			"instanceMonitoring": false,
+			"instanceType": "t2.micro",
+			"keyPair": "spinnaker_kp",
+			"loadBalancers": ["spinnakerappdemo-spin-load"],
+			"provider": "aws",
+			"securityGroups": ["sg-cf568fb5"],
+			"stack": "spincluster",
+			"strategy": "highlander",
+			"subnetType": "internal (defaultvpc)",
+			"suspendedProcesses": [],
+			"tags": {},
+			"targetHealthyDeployPercentage": 100,
+			"terminationPolicies": ["Default"],
+			"useAmiBlockDeviceMappings": false,
+			"useSourceCapacity": false,
+			"virtualizationType": null
+		}],
+		"name": "Stagging",
+		"refId": "3",
+		"requisiteStageRefIds": ["2"],
+		"type": "deploy"
+	}, {
+		"baseline": {},
+		"canary": {
+			"application": "spinnakerappdemo",
+			"canaryConfig": {
+				"canaryAnalysisConfig": {
+					"beginCanaryAnalysisAfterMins": "5",
+					"canaryAnalysisIntervalMins": "30",
+					"lookbackMins": 30,
+					"name": "111",
+					"notificationHours": [1],
+					"useGlobalDataset": false,
+					"useLookback": true
+				},
+				"canaryHealthCheckHandler": {
+					"@class": "com.netflix.spinnaker.mine.CanaryResultHealthCheckHandler",
+					"minimumCanaryResultScore": "60"
+				},
+				"canarySuccessCriteria": {
+					"canaryResultScore": "85"
+				},
+				"combinedCanaryResultStrategy": "LOWEST",
+				"lifetimeHours": "0.5",
+				"name": "opsmx"
+			},
+			"canaryDeployments": [{
+				"@class": ".CanaryTaskDeployment",
+				"accountName": "phanip",
+				"baseline": "spinnakerappdemo-spincluster-gp-v014",
+				"canary": "spinnakerappdemo-spincluster-gp-current",
+				"region": "us-west-2",
+				"type": "query"
+			}],
+			"owner": "anonymous",
+			"watchers": []
+		},
+		"name": "ACA Stage",
+		"refId": "4",
+		"requisiteStageRefIds": ["3"],
+		"type": "acaTask"
+	}, {
+		"clusters": [{
+			"account": "phanip",
+			"application": "spinnakerappdemo",
+			"associatePublicIpAddress": true,
+			"availabilityZones": {
+				"us-west-2": ["us-west-2c"]
+			},
+			"base64UserData": "Cgo=",
+			"capacity": {
+				"desired": 1,
+				"max": 1,
+				"min": 1
+			},
+			"cloudProvider": "aws",
+			"cooldown": 10,
+			"copySourceCustomBlockDeviceMappings": true,
+			"ebsOptimized": false,
+			"enabledMetrics": [],
+			"freeFormDetails": "gp",
+			"healthCheckGracePeriod": 600,
+			"healthCheckType": "EC2",
+			"iamRole": "BaseIAMRole",
+			"instanceMonitoring": false,
+			"instanceType": "t2.micro",
+			"keyPair": "spinnaker_kp",
+			"loadBalancers": ["spinnakerappdemo-spin-load"],
+			"provider": "aws",
+			"securityGroups": ["sg-cf568fb5"],
+			"stack": "spincluster",
+			"strategy": "redblack",
+			"subnetType": "internal (defaultvpc)",
+			"suspendedProcesses": [],
+			"tags": {},
+			"targetGroups": [],
+			"targetHealthyDeployPercentage": 100,
+			"terminationPolicies": ["Default"],
+			"useAmiBlockDeviceMappings": false,
+			"useSourceCapacity": false,
+			"virtualizationType": null
+		}],
+		"name": "Deploy",
+		"refId": "5",
+		"requisiteStageRefIds": ["4"],
+		"type": "deploy"
+	}],
+	"triggers": [{
+		"enabled": true,
+		"job": "RestAppPoll",
+		"master": "Edge10",
+		"type": "jenkins"
+	}]
+}, {
+	"application": "spinnakerappdemo",
+	"id": "1de185b0-6716-11e7-b9ab-d19fe9982d66",
+	"index": 0,
+	"keepWaitingPipelines": false,
+	"limitConcurrent": true,
+	"name": "aca-devtest",
+	"parallel": true,
+	"parameterConfig": [],
+	"stages": [{
+		"continuePipeline": false,
+		"failPipeline": true,
+		"job": "RestAppBuild",
+		"master": "Edge10",
+		"name": "Jenkins",
+		"parameters": {},
+		"refId": "1",
+		"requisiteStageRefIds": [],
+		"type": "jenkins"
+	}, {
+		"baseAmi": "ami-d4f47fb4",
+		"baseLabel": "release",
+		"baseName": "opsimage-ubuntu14.04-apache",
+		"baseOs": "trusty",
+		"cloudProviderType": "aws",
+		"extendedAttributes": {},
+		"name": "Bake",
+		"package": "restapp",
+		"refId": "2",
+		"region": "us-west-2",
+		"regions": ["us-west-2"],
+		"requisiteStageRefIds": ["1"],
+		"storeType": "ebs",
+		"type": "bake",
+		"user": "anonymous",
+		"vmType": "hvm"
+	}, {
+		"clusters": [{
+			"account": "phanip",
+			"application": "spinnakerappdemo",
+			"associatePublicIpAddress": true,
+			"availabilityZones": {
+				"us-west-2": ["us-west-2c"]
+			},
+			"base64UserData": "Cg==",
+			"capacity": {
+				"desired": 1,
+				"max": 1,
+				"min": 1
+			},
+			"cloudProvider": "aws",
+			"cooldown": 10,
+			"copySourceCustomBlockDeviceMappings": true,
+			"ebsOptimized": false,
+			"enabledMetrics": [],
+			"freeFormDetails": "gp",
+			"healthCheckGracePeriod": 600,
+			"healthCheckType": "EC2",
+			"iamRole": "BaseIAMRole",
+			"instanceMonitoring": false,
+			"instanceType": "t2.micro",
+			"keyPair": "spinnaker_kp",
+			"loadBalancers": ["spinnakerappdemo-spin-load"],
+			"provider": "aws",
+			"securityGroups": ["sg-cf568fb5"],
+			"stack": "spincluster",
+			"strategy": "highlander",
+			"subnetType": "internal (defaultvpc)",
+			"suspendedProcesses": [],
+			"tags": {},
+			"targetGroups": [],
+			"targetHealthyDeployPercentage": 100,
+			"terminationPolicies": ["Default"],
+			"useAmiBlockDeviceMappings": false,
+			"useSourceCapacity": false,
+			"virtualizationType": null
+		}],
+		"name": "Deploy",
+		"refId": "3",
+		"requisiteStageRefIds": ["2"],
+		"type": "deploy"
+	}, {
+		"baseline": {},
+		"canary": {
+			"application": "spinnakerappdemo",
+			"canaryConfig": {
+				"canaryAnalysisConfig": {
+					"beginCanaryAnalysisAfterMins": "5",
+					"canaryAnalysisIntervalMins": "30",
+					"lookbackMins": 30,
+					"name": "111",
+					"notificationHours": [1],
+					"useLookback": true
+				},
+				"canaryHealthCheckHandler": {
+					"@class": "com.netflix.spinnaker.mine.CanaryResultHealthCheckHandler",
+					"minimumCanaryResultScore": "60"
+				},
+				"canarySuccessCriteria": {
+					"canaryResultScore": "85"
+				},
+				"combinedCanaryResultStrategy": "AGGREGATE",
+				"lifetimeHours": ".5",
+				"name": "opsmx"
+			},
+			"canaryDeployments": [{
+				"@class": ".CanaryTaskDeployment",
+				"accountName": "phanip",
+				"baseline": "spinnakerappdemo-spincluster-gp-v009",
+				"canary": "spinnakerappdemo-spincluster-gp-current",
+				"region": "us-west-2",
+				"type": "query"
+			}],
+			"owner": "anonymous",
+			"watchers": []
+		},
+		"name": "ACA Task",
+		"refId": "4",
+		"requisiteStageRefIds": ["3"],
+		"type": "acaTask"
+	}],
+	"triggers": [{
+		"enabled": false,
+		"job": "RestAppPoll",
+		"master": "Edge10",
+		"type": "jenkins"
+	}]
+}, {
+	"application": "spinnakerappdemo",
+	"id": "0b5a3040-6dce-11e7-b9ab-d19fe9982d66",
+	"index": 3,
+	"keepWaitingPipelines": false,
+	"limitConcurrent": true,
+	"name": "openshift",
+	"parallel": true,
+	"stages": [],
+	"triggers": []
+}]
